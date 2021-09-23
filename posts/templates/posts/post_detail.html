@@ -18,11 +18,15 @@
         <p class="text-light">There post has {{ total }} comment{{ total|pluralize }}</p>
     {% endwith %}
 
-    <form action="" method="post" class="col-md-5">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" class="btn btn-primary" value="Add Comment">
-    </form>
+    {% if request.user.is_authenticated %}
+        <form action="" method="post" class="col-md-5">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" class="btn btn-primary" value="Add Comment">
+        </form>
+    {% else %}
+                <p class="text-warning p-4 m-3" >{Only logged in user can reply send}</p>
+    {% endif %}
 
 
     <br><br><br>
