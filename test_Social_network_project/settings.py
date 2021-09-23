@@ -72,7 +72,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'test_Social_network_project.wsgi.application'
 
-LOGIN_URL = 'account:login'
+LOGIN_URL = 'account:user_login'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

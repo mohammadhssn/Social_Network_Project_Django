@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ user.username }} dashboard {% endblock %}
+
+
+{% block content %}
+
+    {% if self_dash %}
+        <a type="submit" href="{% url 'posts:add_post' user.id %}"  class="btn btn-primary">Add Post</a>
+    {% endif %}
+
+    <p class="text-center text-light">{{ user.username|capfirst }}</p>
+    <p class="text-center">{{ user.profile.bio }}</p>
+    <p class="text-center">Age: {{ user.profile.age }}</p>
+
+    {% for post in posts %}
+        <div class="card">
+            <p class="card-body"><a href="{{ post.get_absolute_url }}">{{ post.body }}</a></p>
+        </div><br>
+    {% empty %}
+        <p>this user no has post</p>
+    {% endfor %}
+
+{% endblock %}

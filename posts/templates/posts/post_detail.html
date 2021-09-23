@@ -2,7 +2,13 @@
 
 {% block title %} Post detail {% endblock %}
 
+
 {% block content %}
-        <p>{{ post.user }} <br> {{ post.created|date }}</p><hr>
-        <p>{{ post.body }}</p>
+    {% if request.user.is_authenticated and request.user.id == post.user.id %}
+        <a type="submit" href="{% url 'posts:delete_post' post.user.id post.id %}"  class="btn btn-danger">Delete Post</a>
+        <a type="submit" href="{% url 'posts:edit_post' post.user.id post.id %}"  class="btn btn-primary">Edit Post</a>
+    {% endif %}<br><br>
+
+    <p>{{ post.user }} <br> {{ post.created|date }}</p><hr>
+    <p>{{ post.body }}</p>
 {% endblock %}
