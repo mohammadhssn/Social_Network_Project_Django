@@ -5,10 +5,50 @@
 
 {% block content %}
     {% if request.user.is_authenticated and request.user.id == post.user.id %}
-        <a type="submit" href="{% url 'posts:delete_post' post.user.id post.id %}"  class="btn btn-danger">Delete Post</a>
-        <a type="submit" href="{% url 'posts:edit_post' post.user.id post.id %}"  class="btn btn-primary">Edit Post</a>
+        <a type="submit" href="{% url 'posts:delete_post' post.user.id post.id %}" class="btn btn-danger">Delete
+            Post</a>
+        <a type="submit" href="{% url 'posts:edit_post' post.user.id post.id %}" class="btn btn-primary">Edit Post</a>
     {% endif %}<br><br>
 
-    <p>{{ post.user }} <br> {{ post.created|date }}</p><hr>
+    <p>{{ post.user }} <br> {{ post.created|date }}</p>
+    <hr>
     <p>{{ post.body }}</p>
+
+    {% with total=comments.count %}
+        <p class="text-light">There post has {{ total }} comment{{ total|pluralize }}</p>
+    {% endwith %}
+
+    <form action="" method="post" class="col-md-5">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-primary" value="Add Comment">
+    </form>
+
+
+    <br><br><br>
+
+    {% for comment in comments %}
+        <div class="card">
+            <p class="card-header bg-dark text-white">{{ comment.user }}</p>
+            <p class="card-body text-success  m-3">{{ comment.body }}</p>
+            {% if request.user.is_authenticated %}
+                <div class="card-body">
+                    <form action="{% url 'posts:add_reply' post.id comment.id %}" method="post">
+                        {% csrf_token %}
+                        {{ reply_form.as_p }}
+                        <input type="submit" value="Send" class="btn btn-primary">
+                    </form>
+                </div>
+            {% else %}
+                <p class="text-warning p-4 m-3" >{Only logged in user can reply send}</p>
+            {% endif %}
+            {% for reply in comment.rcomment.all %}
+                <p class="bg-primary text-light p-3 m-5">{{ reply.user }} <br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ reply.body }}</p>
+            {% endfor %}
+
+        </div><br><br><br>
+    {% endfor %}
+
+
 {% endblock %}
