@@ -7,6 +7,7 @@
 
     {% if self_dash %}
         <a type="submit" href="{% url 'posts:add_post' user.id %}"  class="btn btn-primary">Add Post</a>
+        <a type="submit" href="{% url 'account:edit_profile' user.id %}"  class="btn btn-success">Edit Profile</a>
     {% endif %}
 
     <p class="text-center text-light">{{ user.username|capfirst }}</p>

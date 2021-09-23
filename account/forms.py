@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import Profile
 
 
 class UserLoginForm(forms.Form):
@@ -45,3 +46,11 @@ class UserRegistrationForm(forms.Form):
         if p1 and p2:
             if p1 != p2:
                 raise forms.ValidationError('Password must be Match.')
+
+
+class EditProfileForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = Profile
+        fields = ('bio', 'age')
