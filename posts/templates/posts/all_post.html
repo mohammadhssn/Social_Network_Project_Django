@@ -3,10 +3,11 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
-    <div class="card">
     {% for post in posts %}
-        <p class="card-header">{{ post.user }}</p>
-        <p class="card-body">{{ post.body }}</p>
+        <div class="card">
+            <p class="card-header">{{ post.user }}</p>
+            <p class="card-body"><a href="{{ post.get_absolute_url }}">{{ post.body }}</a></p>
+        </div><br>
     {% endfor %}
-    </div>
+
 {% endblock %}
