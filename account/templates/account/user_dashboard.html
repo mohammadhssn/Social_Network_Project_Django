@@ -1,18 +1,29 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %} {{ user.username }} dashboard {% endblock %}
 
+{% block js_files %}
+    <script src="{% static 'account/js/script.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 
     {% if self_dash %}
-        <a type="submit" href="{% url 'posts:add_post' user.id %}"  class="btn btn-primary">Add Post</a>
-        <a type="submit" href="{% url 'account:edit_profile' user.id %}"  class="btn btn-success">Edit Profile</a>
+        <a type="submit" href="{% url 'posts:add_post' user.id %}" class="btn btn-primary">Add Post</a>
+        <a type="submit" href="{% url 'account:edit_profile' user.id %}" class="btn btn-success">Edit Profile</a>
     {% endif %}
 
     <p class="text-center text-light">{{ user.username|capfirst }}</p>
     <p class="text-center">{{ user.profile.bio }}</p>
     <p class="text-center">Age: {{ user.profile.age }}</p>
+
+    {% if request.user.id != user.id and not is_relation %}
+    <button id="following-btn" data-id="{{ user.id }}" style="display: block"  class="btn btn-primary text-center mx-auto" >Follow</button>
+    {% elif request.user.id != user.id and is_relation %}
+        <button id="following-btn" data-id="{{ user.id }}" style="display: block"  class="btn btn-warning text-center mx-auto" >UnFollow</button>
+    {% endif %}
+    <br><br><br>
 
     {% for post in posts %}
         <div class="card">

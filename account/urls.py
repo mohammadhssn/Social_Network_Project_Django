@@ -11,4 +11,6 @@ urlpatterns = [
     path('edit_profile/<int:user_id>/', views.edit_profile, name='edit_profile'),
     path('phone_login/', views.phone_login, name='phone_login'),
     path('verifty_phone/', views.verify_phone, name='verify_phone'),
+    path('follow/', views.follow, name='follow'),
+    path('unfollow/', views.unfollow, name='unfollow'),
 ]

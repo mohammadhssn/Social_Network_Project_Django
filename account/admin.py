@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile
+from .models import Profile, Relation
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.db.models.signals import post_save
@@ -25,3 +25,6 @@ def SaveProfile(sender, **kwargs):
 
 
 post_save.connect(receiver=SaveProfile, sender=User)
+
+
+admin.site.register(Relation)

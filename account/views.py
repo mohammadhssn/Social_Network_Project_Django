@@ -5,10 +5,11 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from posts.models import Post
-from .models import Profile
+from .models import Profile, Relation
 from random import randint
 from kavenegar import *
 from django.utils import timezone
+from django.http.response import JsonResponse
 
 
 # Create your views here.
@@ -60,9 +61,14 @@ def user_dashboard(request, user_id):
     user = get_object_or_404(User, pk__exact=user_id)
     posts = Post.objects.filter(user=user)
     self_dash = False
+    is_relation = False
+    relation = Relation.objects.filter(from_user=request.user, to_user=user)
+    if relation.exists():
+        is_relation = True
     if request.user.id == user.id:
         self_dash = True
-    return render(request, 'account/user_dashboard.html', {'user': user, 'posts': posts, 'self_dash': self_dash})
+    return render(request, 'account/user_dashboard.html',
+                  {'user': user, 'posts': posts, 'self_dash': self_dash, 'is_relation': is_relation})
 
 
 @login_required
@@ -143,3 +149,29 @@ def verify_phone(request):
     else:
         form = VerifyLoginForm()
     return render(request, 'account/verify_phone.html', {'form': form})
+
+
+@login_required
+def follow(request):
+    if request.method == 'POST':
+        user_id = request.POST['user_id']
+        following = get_object_or_404(User, id=user_id)
+        relation = Relation.objects.filter(from_user=request.user, to_user=following)
+        if relation.exists():
+            return JsonResponse({'status': 'exists'})
+        else:
+            Relation(from_user=request.user, to_user=following).save()
+            return JsonResponse({'status': 'ok'})
+
+
+@login_required
+def unfollow(request):
+    if request.method == 'POST':
+        user_id = request.POST['user_id']
+        following = get_object_or_404(User, id=user_id)
+        relation = Relation.objects.filter(from_user=request.user, to_user=following)
+        if relation.exists():
+            relation.delete()
+            return JsonResponse({'status': 'ok'})
+        else:
+            return JsonResponse({'status': 'not exists'})

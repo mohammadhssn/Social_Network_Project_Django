@@ -18,6 +18,15 @@
         <p class="text-light">There post has {{ total }} comment{{ total|pluralize }}</p>
     {% endwith %}
 
+
+
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'posts:post_like' post.id %}"  class="btn btn-primary {% if can_like %} disabled {% endif %} col-md-2">Like {{ post.likes_count }}</a>
+        <a href="{% url 'posts:post_unlike' post.id %}"  class="btn btn-warning {% if not can_like %} disabled {% endif %} col-md-2">UnLike</a>
+    {% endif %}
+    <br><br>
+    <br><br><br>
+
     {% if request.user.is_authenticated %}
         <form action="" method="post" class="col-md-5">
             {% csrf_token %}
@@ -25,7 +34,7 @@
             <input type="submit" class="btn btn-primary" value="Add Comment">
         </form>
     {% else %}
-                <p class="text-warning p-4 m-3" >{Only logged in user can reply send}</p>
+        <p class="text-warning p-4 m-3">{Only logged in user can reply send}</p>
     {% endif %}
 
 
@@ -44,7 +53,7 @@
                     </form>
                 </div>
             {% else %}
-                <p class="text-warning p-4 m-3" >{Only logged in user can reply send}</p>
+                <p class="text-warning p-4 m-3">{Only logged in user can reply send}</p>
             {% endif %}
             {% for reply in comment.rcomment.all %}
                 <p class="bg-primary text-light p-3 m-5">{{ reply.user }} <br><br>
