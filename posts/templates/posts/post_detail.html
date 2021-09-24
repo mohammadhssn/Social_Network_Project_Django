@@ -21,8 +21,10 @@
 
 
     {% if request.user.is_authenticated %}
-        <a href="{% url 'posts:post_like' post.id %}"  class="btn btn-primary {% if can_like %} disabled {% endif %} col-md-2">Like {{ post.likes_count }}</a>
-        <a href="{% url 'posts:post_unlike' post.id %}"  class="btn btn-warning {% if not can_like %} disabled {% endif %} col-md-2">UnLike</a>
+        <a href="{% url 'posts:post_like' post.id %}"
+           class="btn btn-primary {% if can_like %} disabled {% endif %} col-md-2">Like {{ post.like_count }}</a>
+        <a href="{% url 'posts:post_unlike' post.id %}"
+           class="btn btn-warning {% if not can_like %} disabled {% endif %} col-md-2">UnLike</a>
     {% endif %}
     <br><br>
     <br><br><br>
