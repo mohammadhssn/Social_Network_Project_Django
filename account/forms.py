@@ -54,3 +54,18 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('bio', 'age')
+
+
+class PhoneLoginForm(forms.Form):
+    phone = forms.IntegerField()
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        profile = Profile.objects.filter(phone__exact=phone)
+        if not profile.exists():
+            raise forms.ValidationError('Phone number not exists')
+        return self.cleaned_data.get('phone')
+
+
+class VerifyLoginForm(forms.Form):
+    code = forms.IntegerField()
